@@ -107,6 +107,13 @@ def config_hash
   @new_resource.conf['irc'] = 1
   # Set rpc user is "{coin}_user"
   @new_resource.conf['rpcuser'] = "#{@new_resource.name}_user"
+  # Add extra config options
+  if @new_resource.extra_config and @new_resource.extra_config.is_a?(Hash)
+    @new_resource.extra_config.each do |key, value|
+      @new_resource.conf[key] = value
+    end
+  end
+  # Return result
   return @new_resource.conf
 end
 
