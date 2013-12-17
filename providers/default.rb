@@ -49,7 +49,7 @@ action :install do
     mode          0500
   end
 
-  link ::File.join(new_resource.home, new_resource.executable) do
+  link ::File.join(new_resource.home, "#{new_resource.name}d") do
     to            ::File.join(new_resource.clone_path, 'src', new_resource.executable)
     owner         new_resource.user
     group         new_resource.group
@@ -68,7 +68,7 @@ action :install do
     content       config_content
   end
 
-  template "/etc/init/#{new_resource.executable}.conf" do
+  template "/etc/init/#{new_resource.name}d.conf" do
     source        "upstart.conf.erb"
     mode          0700
     cookbook      "crypto-coin"
@@ -77,7 +77,7 @@ action :install do
       :group => new_resource.group,
       :data_dir => new_resource.data_dir,
       :conf_path => conf_file,
-      :executable_name => new_resource.executable,
+      :executable_name => "#{new_resource.name}d",
       :executable_path => ::File.join(new_resource.home, new_resource.executable),
       :autostart => new_resource.autostart,
       :respawn_times => new_resource.respawn_times,
