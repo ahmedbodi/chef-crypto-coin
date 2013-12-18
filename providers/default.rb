@@ -78,7 +78,7 @@ action :install do
       :data_dir => new_resource.data_dir,
       :conf_path => conf_file,
       :executable_name => "#{new_resource.name}d",
-      :executable_path => ::File.join(new_resource.home, new_resource.executable),
+      :executable_path => ::File.join(new_resource.home, "#{new_resource.name}d"),
       :autostart => new_resource.autostart,
       :respawn_times => new_resource.respawn_times,
       :respawn_seconds => new_resource.respawn_seconds
