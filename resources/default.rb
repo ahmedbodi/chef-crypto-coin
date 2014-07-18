@@ -22,4 +22,6 @@ attribute :rpcpassword,    :kind_of => String, :required => true
 attribute :rpcport,        :kind_of => Integer
 attribute :port,           :kind_of => Integer, :required => true
 
+attribute :compile_cmd,    :kind_of => String
+
 attr_accessor :exists

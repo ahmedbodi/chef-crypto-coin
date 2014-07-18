@@ -31,8 +31,8 @@ action :install do
   conf_file = ::File.join(new_resource.home, "#{new_resource.name}.conf")
 
   bash "compile #{new_resource.name}" do
-    code          "make -f makefile.unix clean; make -f makefile.unix USE_UPNP= #{new_resource.executable}"
-    cwd           src_directory
+    code          new_resource.compile_cmd || "cd src; make -f makefile.unix clean; make -f makefile.unix USE_UPNP= #{new_resource.executable}"
+    cwd           new_resource.clone_path
     action        :nothing
     notifies      :run, "bash[strip #{new_resource.name}]", :immediately
   end
