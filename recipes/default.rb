@@ -31,7 +31,7 @@ include_recipe "apt"
 # Apt repository with BerkleyDB 4.8 packages
 apt_repository "bitcoin" do
   uri "http://ppa.launchpad.net/bitcoin/bitcoin/ubuntu"
-  distribution "precise"
+  distribution node[:lsb][:codename]
   components ["main"]
   deb_src true
   keyserver "keyserver.ubuntu.com"

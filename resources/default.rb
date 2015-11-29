@@ -9,6 +9,7 @@ attribute :executable,      :kind_of => String
 attribute :clone_path,      :kind_of => String
 attribute :data_dir,        :kind_of => String
 attribute :conf,            :kind_of => Hash, :default => {}
+attribute :extra_config,    :kind_of => Hash, :default => {}
 
 attribute :autostart,       :kind_of => [TrueClass, FalseClass], :default => true
 attribute :respawn_times,   :kind_of => String, :default => '10'
@@ -20,5 +21,7 @@ attribute :revision,        :kind_of => String, :default => 'master'
 attribute :rpcpassword,    :kind_of => String, :required => true
 attribute :rpcport,        :kind_of => Integer
 attribute :port,           :kind_of => Integer, :required => true
+
+attribute :compile_cmd,    :kind_of => String
 
 attr_accessor :exists

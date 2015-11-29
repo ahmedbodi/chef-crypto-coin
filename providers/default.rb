@@ -31,8 +31,8 @@ action :install do
   conf_file = ::File.join(new_resource.home, "#{new_resource.name}.conf")
 
   bash "compile #{new_resource.name}" do
-    code          "make -f makefile.unix clean; make -f makefile.unix USE_UPNP= #{new_resource.executable}"
-    cwd           src_directory
+    code          new_resource.compile_cmd || "cd src; make -f makefile.unix clean; make -f makefile.unix USE_UPNP= #{new_resource.executable}"
+    cwd           new_resource.clone_path
     action        :nothing
     notifies      :run, "bash[strip #{new_resource.name}]", :immediately
   end
@@ -49,7 +49,7 @@ action :install do
     mode          0500
   end
 
-  link ::File.join(new_resource.home, new_resource.executable) do
+  link ::File.join(new_resource.home, "#{new_resource.name}d") do
     to            ::File.join(new_resource.clone_path, 'src', new_resource.executable)
     owner         new_resource.user
     group         new_resource.group
@@ -68,7 +68,7 @@ action :install do
     content       config_content
   end
 
-  template "/etc/init/#{new_resource.executable}.conf" do
+  template "/etc/init/#{new_resource.name}d.conf" do
     source        "upstart.conf.erb"
     mode          0700
     cookbook      "crypto-coin"
@@ -77,8 +77,8 @@ action :install do
       :group => new_resource.group,
       :data_dir => new_resource.data_dir,
       :conf_path => conf_file,
-      :executable_name => new_resource.executable,
-      :executable_path => ::File.join(new_resource.home, new_resource.executable),
+      :executable_name => "#{new_resource.name}d",
+      :executable_path => ::File.join(new_resource.home, "#{new_resource.name}d"),
       :autostart => new_resource.autostart,
       :respawn_times => new_resource.respawn_times,
       :respawn_seconds => new_resource.respawn_seconds
@@ -107,6 +107,13 @@ def config_hash
   @new_resource.conf['irc'] = 1
   # Set rpc user is "{coin}_user"
   @new_resource.conf['rpcuser'] = "#{@new_resource.name}_user"
+  # Add extra config options
+  if @new_resource.extra_config and @new_resource.extra_config.is_a?(Hash)
+    @new_resource.extra_config.each do |key, value|
+      @new_resource.conf[key] = value
+    end
+  end
+  # Return result
   return @new_resource.conf
 end
 
