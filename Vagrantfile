@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
-  config.vm.hostname = "crypto-coin"
+  config.vm.hostname = "multicoin"
 
   # Standard Ubuntu 12.04.2 base box
   config.vm.box = "ubuntu-12.04.2-amd64"
@@ -15,6 +15,6 @@ Vagrant.configure("2") do |config|
     chef.json = {}
     chef.log_level = :debug
     chef.add_recipe "build-essential"
-    chef.add_recipe "crypto-coin::litecoin"
+    chef.add_recipe "multicoin::litecoin"
   end
 end

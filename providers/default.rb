@@ -71,7 +71,7 @@ action :install do
   template "/etc/init/#{new_resource.name}d.conf" do
     source        "upstart.conf.erb"
     mode          0700
-    cookbook      "crypto-coin"
+    cookbook      "multicoin"
     variables(
       :user => new_resource.user,
       :group => new_resource.group,
@@ -99,14 +99,29 @@ def set_default_attributes
 end
 
 def config_hash
+  # Set RPC Creds
+  @new_resource.conf['rpcuser'] = @new_resource.rpcuser
   @new_resource.conf['rpcpassword'] = @new_resource.rpcpassword
   @new_resource.conf['rpcport'] = @new_resource.rpcport
   @new_resource.conf['port'] = @new_resource.port
-
-  # Connect to IRC for peer discovery
-  @new_resource.conf['irc'] = 1
-  # Set rpc user is "{coin}_user"
-  @new_resource.conf['rpcuser'] = "#{@new_resource.name}_user"
+  # Daemoize the process
+  @new_resource.conf['daemon'] = 1
+  @new_resource.conf['server'] = 1
+  @new_resource.conf['pid'] = "/tmp/#{@new_resource.Acronymn}.pid"
+  # Peer Connectivity 
+  @new_resource.conf['irc'] = 0
+  @new_resource.conf['dns'] = 1
+  @new_resource.conf['forcednseed'] = 1
+  # Info Callbacks
+  @new_resource.conf['alertnotify'] = "alertnotify=/usr/bin/alertnotify %s"
+  @new_resource.conf['blocknotify'] = "blocknotify=/usr/bin/alertblock /usr/bin/#{@new_resource.Acronymn}.push"
+  # Blockchain Storage
+  @new_resource.conf['txindex'] = 1
+  @new_resource.conf['keypool'] = 1000
+  # Transaction Creation Settings
+  @new_resource.conf['sendfreetransactions'] =1
+  # Remote Access
+  @new_resource.conf['rpcallowip'] = ['10.46.73.169']
   # Add extra config options
   if @new_resource.extra_config and @new_resource.extra_config.is_a?(Hash)
     @new_resource.extra_config.each do |key, value|

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: crypto-coin
+# Cookbook Name:: multicoin
 # Recipe:: default
 #
 # Copyright (C) 2013 Andrew Fecheyr
@@ -27,6 +27,7 @@
 # Include this recipe to get access to the crypto_coin LWRP
 
 include_recipe "apt"
+include_recipe 'build-essential::default'
 
 # Apt repository with BerkleyDB 4.8 packages
 apt_repository "bitcoin" do
@@ -40,7 +41,16 @@ end
 
 # Required packages
 package "git-core"
+package "build-essential"
+package "autoconf"
+package "libtool"
+package "libcurl4-openssl-dev"
+package "autotools-dev"
+package "pkg-config"
+package "libevent-dev"
+package "bsdmainutils"
+package "libminiupnpc-dev"
 package "libssl-dev"
 package "libdb4.8-dev"
 package "libdb4.8++-dev"
-package "libboost1.48-all-dev"
+package "libboost-all-dev"

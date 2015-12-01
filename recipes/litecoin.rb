@@ -1,10 +1,10 @@
 # Example recipe that uses the LWRP to install litecoind
 
 # Get access to the LWRP and install prerequisites
-include_recipe "crypto-coin::default"
+include_recipe "multicoin::default"
 
 # Download, compile and configure the cryptocoin
-crypto_coin "litecoin" do
+multicoin "litecoin" do
   repository    "https://github.com/litecoin-project/litecoin.git"
   revision      "0.6.3"
   port          9333
